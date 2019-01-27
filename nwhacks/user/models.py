@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 
 class User(models.Model):
     username = models.CharField(default="user", max_length=100)
@@ -49,7 +50,7 @@ class User(models.Model):
 
 def user_exists(user_id):
     retval = {}
-     try:
+    try:
         temp_obj = User.objects.get(pk=user_id)
         return True
     except ObjectDoesNotExist:

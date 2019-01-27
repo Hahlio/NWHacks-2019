@@ -1,9 +1,8 @@
 from django.shortcuts import render
-
 from django.http import JsonResponse
-
 from .models import User
 from task.models import create_task
+from django.core.exceptions import ObjectDoesNotExist
 
 def handle_new_user(request):
     retval = {}
@@ -18,7 +17,7 @@ def handle_username(request, username):
         temp = User.Objects.get(username=username)
         retval["userID"] = temp.id
         retval["status"] = 200
-    else:
+    except ObjectDoesNotExist:
         retval["status"] = 404
         retval["user_message"] = "User not found"
     return JsonResponse(retval, status=retval["status"])
@@ -125,7 +124,7 @@ def post_user_task_request(request, user_id):
     return retval
 
 # TODO finish up the task generation
-def post_user_goal_task_request(request, user_id, goal_id)
+def post_user_goal_task_request(request, user_id, goal_id):
     retval = {}
     try:
         goal_obj = Goal.objects.get(pk=goal_id)

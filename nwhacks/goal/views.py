@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-
+from django.core.exceptions import ObjectDoesNotExist
 from .models import Goal
 
 # Create your views here.
