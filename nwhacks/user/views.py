@@ -126,7 +126,8 @@ def post_user_task_request(request, user_id):
     body = request.body.decode("utf-8")
     task = create_task_without_goal(body, user_id)
     retval = {
-        "id": task.id,
+        "id": task["task_id"],
+        "status": 200
     }
     return retval
 
@@ -137,5 +138,6 @@ def post_user_goal_task_request(request, user_id, goal_id):
     task = create_task_with_goal(body, goal_id)
     retval = {
         "id": task.id,
+        "status": 200
     }
     return retval
