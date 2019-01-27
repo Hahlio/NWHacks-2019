@@ -25,7 +25,7 @@ SECRET_KEY = '&*s+nl%%vcj=p7t2q#9j*^(nloj&l1*3oe$$ye#f$*v_+=j#70'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['13.64.93.250']
+ALLOWED_HOSTS = ['13.64.93.250', 'localhost']
 
 
 # Application definition
@@ -73,7 +73,14 @@ WSGI_APPLICATION = 'nwhacks.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
+LOCAL = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
+    }
+}
+
+REMOTE = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'nwhacks2019',
@@ -86,6 +93,8 @@ DATABASES = {
         }
     }
 }
+
+DATABASES = LOCAL if 'LOCAL' in os.environ else REMOTE
 
 
 # Password validation
