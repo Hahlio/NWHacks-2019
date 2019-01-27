@@ -49,7 +49,7 @@ class User(models.Model):
 
 def user_exists(user_id):
     retval = {}
-     try:
+    try:
         temp_obj = User.objects.get(pk=user_id)
         return True
     except ObjectDoesNotExist:

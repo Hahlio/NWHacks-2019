@@ -2,6 +2,8 @@ from django.db import models
 import json
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import date
+from goal.models import Goal
+from user.models import User
 
 # Create your models here.
 
@@ -9,8 +11,8 @@ class Task(models.Model):
     description = models.CharField(default="", max_length=100)
     deadline = models.DateField()
     done = models.BooleanField(default=False)
-    goal = models.ForeignKey(Goal, related_name="goal", on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name="user", on_delete=models.CASCADE)
+    goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def inJson(self):
         task_dict = {
@@ -18,7 +20,7 @@ class Task(models.Model):
             "task": self.description,
             "deadline" : self.deadline.__str__(),
             "done" : self.done,
-            "goal_id": self.goal.id
+            "goal_id": self.goal.id,
             "user_id": self.user.id
         }
         return task_dict

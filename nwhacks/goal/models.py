@@ -1,9 +1,8 @@
 import json
 
 from django.db import models
-
+from user.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from task.models import Task
 from django.db.models import Q
 
 # Create your models here.
@@ -11,7 +10,7 @@ class Goal(models.Model):
     goal = models.CharField(default="", max_length=256)
     done = models.BooleanField()
     deadline = models.DateField(auto_now=False, auto_now_add=False)
-    user = models.ForeignKey(User, related_name="user", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def in_json(self):
         retval = {}
