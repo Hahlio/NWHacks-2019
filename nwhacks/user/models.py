@@ -36,17 +36,6 @@ class User(models.Model):
         self.ical = json_obj["ical"]
         self.save()
     
-    # TODO Fix the implementation
-    def edit_user(self, args):
-        json_obj = json.loads(args)
-        if "name" in json_obj:
-            self.name = json_obj["name"]
-        if "tasks" in json_obj:
-            self.name = json_obj["name"]
-        if "name" in json_obj:
-            self.name = json_obj["name"]
-        if "name" in json_obj:
-            self.name = json_obj["name"]
 
 def user_exists(user_id):
     retval = {}
