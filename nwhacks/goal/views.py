@@ -39,7 +39,7 @@ def put_goal(request, goal_id):
     json_args = request.body.decode("utf-8")
     try:
         temp_obj = Goal.objects.get(pk=goal_id)
-        temp_obj.edit(request)
+        temp_obj.edit(json_args)
         retval["status"] = 200
     except ObjectDoesNotExist:
         retval["status"] = 404
