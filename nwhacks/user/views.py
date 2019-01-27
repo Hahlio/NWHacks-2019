@@ -4,37 +4,20 @@ from django.http import JsonResponse
 
 from .models import User
 
-# Create your views here.
+# TODO
+def handle_new_user(request):
+    retval = {}
+    return JsonResponse(retval, status=retval["status"])
 
-def handle_goal(request, goal_id):
-    """
-    satisfies all the goal endpoint commands
-    GET:
-    PUT:
-    POST:
-    DELETE:
-    """
+def handle_user(request, user_id):
     retval = {}
     if request.method == 'GET':
-        retval = get_user(request, goal_id)
+        retval = get_user_request(request, user_id)
     elif request.method == 'PUT':
-        retval = put_user(request, goal_id)
+        retval = put_user_request(request, user_id)
     else:
         retval["status"] = 400
         retval["user_message"] = "Method not defined"
-    return JsonResponse(retval, status=retval["status"])
-
-def get_user(request, user_id):
-    retval = {}
-    
-    return retval
-
-def put_user(request, user_id):
-    retval = {}
-    return retval
-
-def handle_new_user(request):
-    retval = {}
     return JsonResponse(retval, status=retval["status"])
 
 def handle_user_ical(request, user_id):
@@ -42,11 +25,39 @@ def handle_user_ical(request, user_id):
     if request.method == 'GET':
         retval = get_ical_request(request, user_id)
     elif request.method == 'POST':
-        retval = post_ical_request(request, goal_id) 
+        retval = post_ical_request(request, user_id) 
     else:
         retval["status"] = 400
         retval["user_message"] = "Method not defined"
     return JsonResponse(retval, status=retval["status"])
+
+def handle_user_task(request, user_id):
+    retval = {}
+    if request.method == 'POST':
+        retval = post_user_task_request(request, user_id) 
+    else:
+        retval["status"] = 400
+        retval["user_message"] = "Method not defined"
+    return JsonResponse(retval, status=retval["status"])
+
+def handle_user_goal_task(request, user_id, goal_id):
+    retval = {}
+    if request.method == 'POST':
+        retval = post_user_goal_task_request(request, user_id, goal_id) 
+    else:
+        retval["status"] = 400
+        retval["user_message"] = "Method not defined"
+    return JsonResponse(retval, status=retval["status"])
+
+# TODO
+def get_user_request(request, user_id):
+    retval = {}
+    return retval
+
+# TODO
+def put_user_request(request, user_id):
+    retval = {}
+    return retval
 
 def get_ical_request(request, user_id):
     retval = {}
@@ -72,4 +83,14 @@ def post_ical_request(request, user_id):
             "status": 404,
             "user_message": "user cannot be found"
         }
+    return retval
+
+# TODO
+def post_user_task_request(request, user_id):
+    retval = {}
+    return retval
+
+# TODO
+def post_user_goal_task_request(request, user_id, goal_id)
+    retval = {}
     return retval
