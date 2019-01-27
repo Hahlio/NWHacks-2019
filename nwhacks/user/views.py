@@ -16,14 +16,14 @@ def handle_username(request, username):
     if request.method == 'GET':
         retval = {}
         try:
-            temp = User.Objects.get(username=username)
+            temp = User.objects.get(username=username)
             retval["userID"] = temp.id
             retval["status"] = 200
         except ObjectDoesNotExist:
             retval["status"] = 404
             retval["user_message"] = "User not found"
         return JsonResponse(retval, status=retval["status"])
-    else request.method == 'POST':
+    elif request.method == 'POST':
         return handle_new_user(request)
 
 def handle_user(request, user_id):
