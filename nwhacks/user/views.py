@@ -37,7 +37,7 @@ def handle_user_id(request, user_id):
     if request.method == 'GET':
         retval = get_user_request(request, user_id)
         print("DID GET")
-        return JsonResponse(retval)
+        return JsonResponse(retval, status=(404 if retval["status"] is 404 else 200))
     # elif request.method == 'PUT':
     #     retval = put_user_request(request, user_id)
     else:
