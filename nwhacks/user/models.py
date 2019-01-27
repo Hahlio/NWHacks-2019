@@ -11,6 +11,8 @@ class User(models.Model):
     tasks = models.ManyToManyField(Task)
     goals = models.ManyToManyField(Goal)
 
+    ical = models.TextField()
+
     def in_json(self):
         retval = {}
         retval["name"] = self.name
@@ -32,4 +34,28 @@ class User(models.Model):
 
         return retval
 
+    def get_ical(self):
+        return self.ical
     
+    def edit_ical(self, args):
+        json_obj = json.loads(args)
+        self.ical = json_obj["ical"]
+    
+    def edit_user(self, args):
+        json_obj = json.loads(args)
+        if "name" in json_obj:
+            self.name = json_obj["name"]
+        if "tasks" in json_obj:
+            self.name = json_obj["name"]
+        if "name" in json_obj:
+            self.name = json_obj["name"]
+        if "name" in json_obj:
+            self.name = json_obj["name"]
+
+def user_exists(user_id):
+    retval = {}
+     try:
+        temp_obj = User.objects.get(pk=user_id)
+        return True
+    except ObjectDoesNotExist:
+        return False
