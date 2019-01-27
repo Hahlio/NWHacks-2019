@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from .models import User, user_exists, create_user
 from user.models import create_task_with_goal, create_task_without_goal
 from django.core.exceptions import ObjectDoesNotExist
+from goal.views import post_goal
 
 def handle_new_user(username):
     retval = {}
@@ -16,7 +17,7 @@ def handle_new_user(username):
 def handle_username(request, username):
     if request.method == 'GET':
         retval = {}
-        print(request);
+        print(request)
         try:
             temp = User.objects.get(username=username)
             retval["userID"] = temp.id
@@ -74,6 +75,27 @@ def handle_user_goal_task(request, user_id, goal_id):
         retval["status"] = 405
         retval["user_message"] = "Method not defined"
     return JsonResponse(retval, status=retval["status"])
+
+def handle_user_goal(request, user_id):
+    retval = {}
+    if request.method == 'POST':
+        retval = post_user_goal_request(request, user_id) 
+    else:
+        retval["status"] = 405
+        retval["user_message"] = "Method not defined"
+    return JsonResponse(retval, status=retval["status"])
+
+def post_user_goal_request(request, user_id):
+    retval = {}
+    if user_exists(user_id):
+        print("USER EXISTS")
+        body = request.body.decode("utf-8")
+        post_goal(body, user_id)
+    else:
+        print("USER DOESNT EXISTS")
+        retval["status"] = 404
+        retval["user_message"] = "User does not exist"
+        return retval
 
 def get_user_request(request, user_id):
     retval = {}
