@@ -2,7 +2,7 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import User, user_exists, create_user
-from task.models import create_task_with_goal, create_task_without_goal
+from user.models import create_task_with_goal, create_task_without_goal
 from django.core.exceptions import ObjectDoesNotExist
 
 def handle_new_user(username):
@@ -16,29 +16,33 @@ def handle_new_user(username):
 def handle_username(request, username):
     if request.method == 'GET':
         retval = {}
+        print(request);
         try:
             temp = User.objects.get(username=username)
             retval["userID"] = temp.id
             retval["status"] = 200
             print("inside try")
         except ObjectDoesNotExist:
+            print('from here?')
             retval["status"] = 404
             retval["user_message"] = "User not found"
         return JsonResponse(retval, status=retval["status"])
     elif request.method == 'POST':
         return handle_new_user(username)
 
-def handle_user(request, user_id):
-    print("Ran user")
+def handle_user_id(request, user_id):
+    print("Ran user!!!!!!")
     retval = {}
     if request.method == 'GET':
         retval = get_user_request(request, user_id)
+        print("DID GET")
+        return JsonResponse(retval)
     # elif request.method == 'PUT':
     #     retval = put_user_request(request, user_id)
     else:
         retval["status"] = 405
         retval["user_message"] = "Method not defined"
-    return JsonResponse(retval, status=retval["status"])
+        return JsonResponse(retval, status=retval["status"])
 
 def handle_user_ical(request, user_id):
     retval = {}
@@ -53,6 +57,7 @@ def handle_user_ical(request, user_id):
     return JsonResponse(retval, status=retval["status"])
 
 def handle_user_task(request, user_id):
+    print("hello")
     retval = {}
     if request.method == 'POST':
         retval = post_user_task_request(request, user_id) 
@@ -73,11 +78,13 @@ def handle_user_goal_task(request, user_id, goal_id):
 def get_user_request(request, user_id):
     retval = {}
     if user_exists(user_id):
-        User.objects.get(pk=user_id).in_json()
+        print("USER EXISTS")
+        return User.objects.get(pk=user_id).in_json()
     else:
+        print("USER DOESNT EXISTS")
         retval["status"] = 404
         retval["user_message"] = "User does not exist"
-    return retval
+        return retval
 
 # # TODO implement the model function
 # def put_user_request(request, user_id):

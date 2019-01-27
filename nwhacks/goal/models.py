@@ -2,7 +2,7 @@ import json
 
 from datetime import date
 from django.db import models
-from user.models import User
+# from user.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 
@@ -11,7 +11,7 @@ class Goal(models.Model):
     goal = models.CharField(default="", max_length=256)
     done = models.BooleanField()
     deadline = models.DateField(auto_now=False, auto_now_add=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey('user.User', on_delete=models.CASCADE, default=1)
 
     def in_json(self):
         retval = {}
