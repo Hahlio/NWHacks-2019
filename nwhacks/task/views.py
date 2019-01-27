@@ -2,11 +2,14 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from .models import is_valid_id, Task
+from datetime import date
+import json
 
 # Create your views here.
 
 def handle_existing_task(request, task_id):
     retval = {}
+    print("****************")
     if is_valid_id(task_id):
         if request.method == 'GET':
             return get_task(task_id)
@@ -26,6 +29,7 @@ def handle_existing_task(request, task_id):
     return JsonResponse(retval, status=retval["status"])
 
 def get_task(task_id):
+    print("WASSUP")
     task = Task.objects.get(pk=task_id)
     return JsonResponse(task.inJson())
 
@@ -36,3 +40,21 @@ def put_task(task_id, json_args):
         "id": task.id
     }
     return JsonResponse(retval)
+
+def modify_task(task_id, json_args):
+    task = Task.objects.get(pk=task_id)
+    args_dict = json.loads(json_args)
+    task.description = args_dict["task"]
+    done = args_dict["done"]
+    deadline_string = args_dict["deadline"].split('-')
+    year = deadline_string[2]
+    year_int = int(year)
+    month = deadline_string[1]
+    month_int = int(month)
+    day = deadline_string[0]
+    day_int = int(day)
+    deadline_date = date(year_int, month_int, day_int)
+    task.deadline = deadline_date
+    task.save()
+    return task
+
