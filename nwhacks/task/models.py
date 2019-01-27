@@ -22,13 +22,12 @@ class Task(models.Model):
             "task_id": self.id,
             "task": self.description,
             "deadline" : self.deadline.__str__(),
-            "done" : self.done,
-            "user_id": self.user.id
+            "done" : self.done
         }
-        # if self.user is not None:
-        #     task_dict["user_id"] = self.user.id
-        # if self.goal is not None:
-        #     task_dict["goal_id"] = self.goal.id
+        if self.user is not None:
+            task_dict["user_id"] = self.user.id
+        if self.goal is not None:
+            task_dict["goal_id"] = self.goal.id
         return task_dict
 
 # def create_task_with_goal(args, goal_id):

@@ -61,9 +61,9 @@ def create_task_with_goal(args, goal_id):
     arg_dict = json.loads(args)
     deadline_string = arg_dict["deadline"]
     deadline_list = deadline_string.split('-')
-    day = int(deadline[0])
-    month = int(deadline[1])
-    year = int(deadline[2])
+    day = int(deadline_list[0])
+    month = int(deadline_list[1])
+    year = int(deadline_list[2])
     task = Task(description=arg_dict["task"],\
                 deadline=date(year, month, day),\
                 done=arg_dict["done"],\
