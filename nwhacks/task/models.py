@@ -9,8 +9,6 @@ class Task(models.Model):
     deadline = models.DateField()
     done = models.BooleanField(default=False)
 
-    __init__(self)
-
     def inJson(self):
         task_dict = {
             "task_id": self.id,

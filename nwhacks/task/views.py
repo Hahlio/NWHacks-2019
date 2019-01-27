@@ -16,7 +16,7 @@ def handle_existing_task(request, task_id):
             return delete_task(task_id)
         else:
             retval = {
-                "status": 405
+                "status": 405,
                 "user_message": "The requested method is not allowed"
             }
     else:
@@ -33,7 +33,7 @@ def post_task(request):
         return JsonResponse(task.inJson())
     else:
         retval = {
-            "status": 405
+            "status": 405,
             "user_message": "The requested method is not allowed"
         }
         return JsonResponse(retval, status=retval["status"])
