@@ -9,8 +9,8 @@ class Task(models.Model):
     description = models.CharField(default="", max_length=100)
     deadline = models.DateField()
     done = models.BooleanField(default=False)
-    goal_id = models.IntegerField(default=None)
-    user_id=models.IntegerField(default=None)
+    goal = models.ForeignKey(Goal, related_name="goal", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="user", on_delete=models.CASCADE)
 
     def inJson(self):
         task_dict = {
@@ -18,8 +18,8 @@ class Task(models.Model):
             "task": self.description,
             "deadline" : self.deadline.__str__(),
             "done" : self.done,
-            "goal_id": self.goal_id,
-            "user_id": self.user_id
+            "goal_id": self.goal.id
+            "user_id": self.user.id
         }
         return task_dict
 
@@ -49,7 +49,7 @@ def update_task(args, task_id):
     month = int(deadline[1])
     year = int(deadline[2])
     task.description = arg_dict["description"]
-    task.deadline = date(day, month, year)
+    task.deadline = date(year, month, day)
     task.done = arg_dict["done"]
     task.save()
     return task.inJson()

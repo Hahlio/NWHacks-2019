@@ -4,37 +4,27 @@ from django.db import models
 
 from django.core.exceptions import ObjectDoesNotExist
 from task.models import Task
+from django.db.models import Q
 
 # Create your models here.
 class Goal(models.Model):
     goal = models.CharField(default="", max_length=256)
-    tasks = models.ManyToManyField(Task)
     done = models.BooleanField()
     deadline = models.DateField(auto_now=False, auto_now_add=False)
+    user = models.ForeignKey(User, related_name="user", on_delete=models.CASCADE)
 
     def in_json(self):
         retval = {}
         retval["goal"] = self.goal
         retval["done"] = self.done
-
-        tasks = []
-
-        for t in self.tasks.all():
-            tasks.append(t.id)
-
-        retval["task"] = tasks
-
+        retval["user_id"] = self.user.id
+        task_set = Tasks.objects.filter(Q(goal__exact=self))
+        tasks = [task.id for task in task_set]
+        retval["tasks"] = tasks
         return retval
 
     def edit(self, args):
         json_obj = json.loads(args)
-        tasks.clear()
-        for x in json_obj["task"]:
-            try:
-                temp_task = Task.objects.get(pk=x)
-                tasks.add(temp_task)
-            except ObjectDoesNotExist:
-                test = 1
         self.goal = json_obj["goal"]
         self.done = json_obj["done"]
         date = json_obj["deadline"].split("-")
