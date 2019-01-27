@@ -1,36 +1,29 @@
 from django.db import models
+from django.db.models import Q
 
-# Create your models here.
 class User(models.Model):
-    name = models.CharField(default="John Doe", max_length=100)
     username = models.CharField(default="user", max_length=100)
     password = models.CharField(default="1234", max_length=100)
     
     deviceID = models.TextField(default = "abc123abc")
-    
-    tasks = models.ManyToManyField(Task)
-    goals = models.ManyToManyField(Goal)
 
     ical = models.TextField()
 
     def in_json(self):
         retval = {}
-        retval["name"] = self.name
-        retval["username"] = self.username
+        retval["Name"] = self.username
 
         tasks = []
-
-        for t in self.tasks.all():
+        q_set = Tasks.objects.all().filter(Q(user__exact=self))
+        for t in q_set:
             tasks.append(t.id)
-
-        retval["task"] = tasks
+        retval["tasks"] = tasks
 
         goals = []
-
-        for g in self.goals.all():
+        q_set = Goals.objects.all().filter(Q(user__exact=self))
+        for g in q_set:
             goals.append(g.id)
-
-        retval["goals"] = goals
+        retval["Goal"] = goals
 
         return retval
 
@@ -40,7 +33,9 @@ class User(models.Model):
     def edit_ical(self, args):
         json_obj = json.loads(args)
         self.ical = json_obj["ical"]
+        self.save()
     
+    # TODO Fix the implementation
     def edit_user(self, args):
         json_obj = json.loads(args)
         if "name" in json_obj:
@@ -59,3 +54,8 @@ def user_exists(user_id):
         return True
     except ObjectDoesNotExist:
         return False
+
+def create_user(body):
+    user = User(username=body["username"])
+    user.save()
+    return user.id
