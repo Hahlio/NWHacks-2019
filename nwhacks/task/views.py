@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 def handle_existing_task(request, task_id):
     retval = {}
     if is_valid_id(task_id):
-        if request_type == 'GET':
+        if request.method == 'GET':
             return get_task(task_id)
         elif request.method == 'PUT':
             json_args = request.body.decode("utf-8")
