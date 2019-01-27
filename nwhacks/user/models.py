@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 
 class User(models.Model):
     username = models.CharField(default="user", max_length=100)
