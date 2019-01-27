@@ -1,6 +1,7 @@
 from django.db import models
 import json
 from django.core.exceptions import ObjectDoesNotExist
+from datetime import date
 
 # Create your models here.
 
@@ -21,8 +22,13 @@ class Task(models.Model):
 
 def create_task(args):
     arg_dict = json.loads(args)
+    deadline_string = arg_dict["deadline"]
+    deadline_list = deadline_string.split('-')
+    day = int(deadline[0])
+    month = int(deadline[1])
+    year = int(deadline[2])
     task = Task(description=arg_dict["description"],\
-                deadline=arg_dict["deadline"],\
+                deadline=date(day, month, year),\
                 done=arg_dict["done"])
     task.save()
     return task.inJson()
@@ -31,8 +37,13 @@ def create_task(args):
 def update_task(args, task_id):
     task = Task.objects.get(pk=task_id)
     arg_dict = json.loads(args)
+    deadline_string = arg_dict["deadline"]
+    deadline_list = deadline_string.split('-')
+    day = int(deadline[0])
+    month = int(deadline[1])
+    year = int(deadline[2])
     task.description = arg_dict["description"]
-    task.deadline = arg_dict["deadline"]
+    task.deadline = date(day, month, year)
     task.done = arg_dict["done"]
     task.save()
     return task.inJson()
