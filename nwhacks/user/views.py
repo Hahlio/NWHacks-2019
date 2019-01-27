@@ -12,15 +12,18 @@ def handle_new_user(request):
     return JsonResponse(retval, status=retval["status"])
 
 def handle_username(request, username):
-    retval = {}
-    try:
-        temp = User.Objects.get(username=username)
-        retval["userID"] = temp.id
-        retval["status"] = 200
-    except ObjectDoesNotExist:
-        retval["status"] = 404
-        retval["user_message"] = "User not found"
-    return JsonResponse(retval, status=retval["status"])
+    if request.method == 'GET':
+        retval = {}
+        try:
+            temp = User.Objects.get(username=username)
+            retval["userID"] = temp.id
+            retval["status"] = 200
+        except ObjectDoesNotExist:
+            retval["status"] = 404
+            retval["user_message"] = "User not found"
+        return JsonResponse(retval, status=retval["status"])
+    else request.method == 'POST':
+        return handle_new_user(request)
 
 def handle_user(request, user_id):
     retval = {}
