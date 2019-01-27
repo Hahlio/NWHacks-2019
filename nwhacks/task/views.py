@@ -1,6 +1,5 @@
 from django.http import JsonResponse
 from django.shortcuts import render
-from .models import Task, create_task, update_task
 from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.

@@ -2,7 +2,7 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import User, user_exists, create_user
-from task.models import create_task
+from task.models import create_task_with_goal, create_task_without_goal
 from django.core.exceptions import ObjectDoesNotExist
 
 def handle_new_user(request):
@@ -28,8 +28,8 @@ def handle_user(request, user_id):
     retval = {}
     if request.method == 'GET':
         retval = get_user_request(request, user_id)
-    elif request.method == 'PUT':
-        retval = put_user_request(request, user_id)
+    # elif request.method == 'PUT':
+    #     retval = put_user_request(request, user_id)
     else:
         retval["status"] = 405
         retval["user_message"] = "Method not defined"
@@ -74,22 +74,22 @@ def get_user_request(request, user_id):
         retval["user_message"] = "User does not exist"
     return retval
 
-# TODO implement the model function
-def put_user_request(request, user_id):
-    retval = {}
-    if user_exists(user_id):
-        user_obj = User.objects.get(pk=user_id)
-        body = request.body.decode("utf-8")
-        # use user_obj to edit the values based on the body
-        retval = {
-            "status": 200
-        }
-    else:
-        retval = {
-            "status": 404,
-            "user_message": "User does not exist"
-        }
-    return retval
+# # TODO implement the model function
+# def put_user_request(request, user_id):
+#     retval = {}
+#     if user_exists(user_id):
+#         user_obj = User.objects.get(pk=user_id)
+#         body = request.body.decode("utf-8")
+#         # use user_obj to edit the values based on the body
+#         retval = {
+#             "status": 200
+#         }
+#     else:
+#         retval = {
+#             "status": 404,
+#             "user_message": "User does not exist"
+#         }
+#     return retval
 
 def get_ical_request(request, user_id):
     retval = {}
@@ -117,28 +117,22 @@ def post_ical_request(request, user_id):
         }
     return retval
 
-# TODO finish up the task generation
 def post_user_task_request(request, user_id):
     # Create the task
     # Associate task with user
+    body = request.body.decode("utf-8")
+    task = create_task_without_goal(body, user_id)
     retval = {
-        "status": 200,
+        "id": task.id,
     }
     return retval
 
-# TODO finish up the task generation
 def post_user_goal_task_request(request, user_id, goal_id):
-    retval = {}
-    try:
-        goal_obj = Goal.objects.get(pk=goal_id)
-        # Create the task
-        # Associate task with user
-        # Associate task with goal
-        # Return the status
-    except ObjectDoesNotExist:
-        retval = {
-            "status": 404,
-            "user_message": "goal cannot be found"
-        }
-    
+    # Create the task
+    # Associate task with goal
+    body = request.body.decode("utf-8")
+    task = create_task_with_goal(body, goal_id)
+    retval = {
+        "id": task.id,
+    }
     return retval
