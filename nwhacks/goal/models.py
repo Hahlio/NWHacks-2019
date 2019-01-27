@@ -3,12 +3,12 @@ import json
 from django.db import models
 
 from django.core.exceptions import ObjectDoesNotExist
-#from Task.models import Task
+from task.models import Task
 
 # Create your models here.
 class Goal(models.Model):
     goal = models.CharField(default="", max_length=256)
-    #tasks = models.ManyToManyField(Task)
+    tasks = models.ManyToManyField(Task)
     done = models.BooleanField()
     deadline = models.DateField(auto_now=False, auto_now_add=False)
 
@@ -16,14 +16,11 @@ class Goal(models.Model):
         retval = {}
         retval["goal"] = self.goal
         retval["done"] = self.done
-        task_number = 1
-        tasks = {}
+
+        tasks = []
 
         for t in self.tasks.all():
-            task_obj = {}
-            task_obj["taskID"] = t.id
-            tasks[str(task_number)] = task_obj
-            task_number += 1
+            tasks.append(t.id)
 
         retval["task"] = tasks
 
@@ -31,10 +28,17 @@ class Goal(models.Model):
 
     def edit(self, args):
         json_obj = json.loads(args)
-        #for x in json_obj["task"]:
-            #try:
-                #temp_task = Task.objects.get(pk=x)
-                
+        tasks.clear()
+        for x in json_obj["task"]:
+            try:
+                temp_task = Task.objects.get(pk=x)
+                tasks.add(temp_task)
+            except ObjectDoesNotExist:
+                test = 1
+        self.goal = json_obj["goal"]
+        self.done = json_obj["done"]
+        date = json_obj["deadline"].split("-")
+        self.deadline = datetime.datetime(date[2], date[1], date[0])
 
 def create_goal(args):
     json_obj = json.loads(args)
