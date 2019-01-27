@@ -31,7 +31,7 @@ def handle_new_goal(request):
     retval = {}
     if request.methond == 'POST':
         retval = post_goal(request)
-    else
+    else:
         retval["status"] = 400
         retval["user_message"] = "Method not defined"
     return JsonResponse(retval, status=retval["status"])

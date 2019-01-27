@@ -10,7 +10,6 @@ from django.db.models import Q
 class Goal(models.Model):
     goal = models.CharField(default="", max_length=256)
     done = models.BooleanField()
-    deadline = models.DateField(auto_now=False, auto_now_add=False)
     user = models.ForeignKey('user.User', on_delete=models.CASCADE, default=1)
 
     def in_json(self):
@@ -27,14 +26,10 @@ class Goal(models.Model):
         json_obj = json.loads(args)
         self.goal = json_obj["goal"]
         self.done = json_obj["done"]
-        date = json_obj["deadline"].split("-")
-        self.deadline = date(int(date[2]), int(date[1]), int(date[0]))
 
 def create_goal(args):
     json_obj = json.loads(args)
     goal = Goal(goal=json_obj['goal'], done=json_obj['done'])
-    date = json_obj["deadline"].split("-")
-    goal.deadline = date(int(date[2]), int(date[1]), int(date[0]))
     goal.save()
     return goal.id
 
