@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import User
-from task.models import create_task
+from task.models import create_task_with_goal, create_task_without_goal
 from django.core.exceptions import ObjectDoesNotExist
 
 def handle_new_user(request):
