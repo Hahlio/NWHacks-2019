@@ -5,9 +5,9 @@ from .models import User, user_exists, create_user
 from task.models import create_task_with_goal, create_task_without_goal
 from django.core.exceptions import ObjectDoesNotExist
 
-def handle_new_user(request):
+def handle_new_user(username):
     retval = {}
-    user_id = create_user(json.loads(request.body.decode("utf-8")))
+    user_id = create_user({"username":username})
     retval["ID"] = user_id
     retval["status"] = 200
     return JsonResponse(retval, status=retval["status"])
