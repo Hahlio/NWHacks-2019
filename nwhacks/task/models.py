@@ -25,8 +25,7 @@ class Task(models.Model):
         }
         return task_dict
 
-
-def create_task(args):
+def create_task_with_goal(args, goal_id):
     arg_dict = json.loads(args)
     deadline_string = arg_dict["deadline"]
     deadline_list = deadline_string.split('-')
@@ -34,10 +33,25 @@ def create_task(args):
     month = int(deadline[1])
     year = int(deadline[2])
     task = Task(description=arg_dict["description"],\
-                deadline=date(day, month, year),\
+                deadline=date(year, month, day),\
                 done=arg_dict["done"],\
-                goal_id=arg_dict["goal_id"],\
-                user_id=arg_dict["user_id"])
+                goal=Goal.objects.filter(Q(id__exact=goal_id)),\
+                user=None)
+    task.save()
+    return task.inJson()
+
+def create_task_without_goal(args, user_id):
+    arg_dict = json.loads(args)
+    deadline_string = arg_dict["deadline"]
+    deadline_list = deadline_string.split('-')
+    day = int(deadline[0])
+    month = int(deadline[1])
+    year = int(deadline[2])
+    task = Task(description=arg_dict["description"],\
+                deadline=date(year, month, day),\
+                done=arg_dict["done"],\
+                goal=None,\
+                user=User.objects.filter(Q(id__exact=user_id)))
     task.save()
     return task.inJson()
 
