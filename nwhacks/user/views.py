@@ -75,6 +75,15 @@ def handle_user_goal_task(request, user_id, goal_id):
         retval["user_message"] = "Method not defined"
     return JsonResponse(retval, status=retval["status"])
 
+def handle_user_goal(request, user_id):
+    retval = {}
+    if request.method == 'POST':
+        retval = post_user_goal_request(request, user_id, goal_id) 
+    else:
+        retval["status"] = 405
+        retval["user_message"] = "Method not defined"
+    return JsonResponse(retval, status=retval["status"])
+
 def get_user_request(request, user_id):
     retval = {}
     if user_exists(user_id):

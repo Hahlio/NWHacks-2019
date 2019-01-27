@@ -33,6 +33,8 @@ class Goal(models.Model):
 def create_goal(args):
     json_obj = json.loads(args)
     goal = Goal(goal=json_obj['goal'], done=json_obj['done'])
+    date = json_obj["deadline"].split("-")
+    goal.deadline = date(int(date[2]), int(date[1]), int(date[0]))
     goal.save()
     return goal.id
 
