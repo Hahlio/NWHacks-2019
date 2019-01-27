@@ -12,8 +12,6 @@ def handle_existing_task(request, task_id):
         elif request.method == 'PUT':
             json_args = request.body.decode("utf-8")
             return put_task(task_id, json_args)
-        elif request.method == 'DELETE':
-            return delete_task(task_id)
         else:
             retval = {
                 "status": 405,
@@ -26,20 +24,6 @@ def handle_existing_task(request, task_id):
         }
     return JsonResponse(retval, status=retval["status"])
 
-def post_task(request):
-    if request.method == 'POST':
-        json_args = request.body.decode("utf-8")
-        task = create_task(json_args)
-        return JsonResponse(task.inJson())
-    else:
-        retval = {
-            "status": 405,
-            "user_message": "The requested method is not allowed"
-        }
-        return JsonResponse(retval, status=retval["status"])
-
-
-
 def get_task(task_id):
     task = Task.objects.get(pk=task_id)
     return JsonResponse(task.inJson())
@@ -47,9 +31,7 @@ def get_task(task_id):
 
 def put_task(task_id, json_args):
     task = modify_task(task_id, json_args)
-    return JsonResponse(task.inJson())
-
-def delete_task(task_id):
-    task = Task.objects.get(pk=task_id)
-    task.delete()
-    return jsonResponse({})
+    retval = {
+        "id": task.id
+    }
+    return JsonResponse(retval)

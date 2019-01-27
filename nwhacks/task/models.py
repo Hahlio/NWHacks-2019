@@ -9,13 +9,17 @@ class Task(models.Model):
     description = models.CharField(default="", max_length=100)
     deadline = models.DateField()
     done = models.BooleanField(default=False)
+    goal_id = models.IntegerField(default=None)
+    user_id=models.IntegerField(default=None)
 
     def inJson(self):
         task_dict = {
             "task_id": self.id,
-            "description": self.description,
+            "task": self.description,
             "deadline" : self.deadline.__str__(),
-            "done" : self.done
+            "done" : self.done,
+            "goal_id": self.goal_id,
+            "user_id": self.user_id
         }
         return task_dict
 
@@ -29,7 +33,9 @@ def create_task(args):
     year = int(deadline[2])
     task = Task(description=arg_dict["description"],\
                 deadline=date(day, month, year),\
-                done=arg_dict["done"])
+                done=arg_dict["done"],\
+                goal_id=arg_dict["goal_id"],\
+                user_id=arg_dict["user_id"])
     task.save()
     return task.inJson()
 
