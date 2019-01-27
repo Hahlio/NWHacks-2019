@@ -5,6 +5,7 @@ from django.db import models
 # from user.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from task.models import Task
 
 # Create your models here.
 class Goal(models.Model):
@@ -17,7 +18,7 @@ class Goal(models.Model):
         retval["goal"] = self.goal
         retval["done"] = self.done
         retval["user_id"] = self.user.id
-        task_set = Tasks.objects.filter(Q(goal__exact=self))
+        task_set = Task.objects.filter(Q(goal__exact=self))
         tasks = [task.id for task in task_set]
         retval["tasks"] = tasks
         return retval

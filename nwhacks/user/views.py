@@ -90,7 +90,9 @@ def post_user_goal_request(request, user_id):
     if user_exists(user_id):
         print("USER EXISTS")
         body = request.body.decode("utf-8")
-        post_goal(body, user_id)
+        retval = post_goal(body, user_id)
+        print(retval)
+        return retval
     else:
         print("USER DOESNT EXISTS")
         retval["status"] = 404

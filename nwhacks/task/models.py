@@ -14,8 +14,8 @@ class Task(models.Model):
     done = models.BooleanField(default=False)
     # goal = models.ForeignKey(Goal, on_delete=models.CASCADE, null=True)
     # user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    goal = models.ForeignKey('goal.Goal', on_delete=models.CASCADE)
-    user = models.ForeignKey('user.User', on_delete=models.CASCADE)
+    goal = models.ForeignKey('goal.Goal', on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey('user.User', on_delete=models.CASCADE, null=True)
 
     def inJson(self):
         task_dict = {
