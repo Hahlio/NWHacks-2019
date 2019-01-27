@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
@@ -35,7 +36,6 @@ class User(models.Model):
         json_obj = json.loads(args)
         self.ical = json_obj["ical"]
         self.save()
-    
 
 def user_exists(user_id):
     retval = {}
