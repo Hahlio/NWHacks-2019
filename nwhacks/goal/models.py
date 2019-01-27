@@ -1,7 +1,6 @@
 import json
 
 from django.db import models
-
 from django.core.exceptions import ObjectDoesNotExist
 from task.models import Task
 from django.db.models import Q
