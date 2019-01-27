@@ -1,6 +1,7 @@
+import json
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import User
+from .models import User, user_exists, create_user
 from task.models import create_task_with_goal, create_task_without_goal
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -14,7 +15,7 @@ def handle_new_user(request):
 def handle_username(request, username):
     retval = {}
     try:
-        temp = User.Objects.get(username=username)
+        temp = User.objects.get(username=username)
         retval["userID"] = temp.id
         retval["status"] = 200
     except ObjectDoesNotExist:
@@ -23,6 +24,7 @@ def handle_username(request, username):
     return JsonResponse(retval, status=retval["status"])
 
 def handle_user(request, user_id):
+    print("Ran user")
     retval = {}
     if request.method == 'GET':
         retval = get_user_request(request, user_id)
@@ -35,6 +37,7 @@ def handle_user(request, user_id):
 
 def handle_user_ical(request, user_id):
     retval = {}
+    print("Ran ical")
     if request.method == 'GET':
         retval = get_ical_request(request, user_id)
     elif request.method == 'POST':

@@ -11,8 +11,8 @@ class Task(models.Model):
     description = models.CharField(default="", max_length=100)
     deadline = models.DateField()
     done = models.BooleanField(default=False)
-    goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    goal = models.ForeignKey(Goal, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
     def inJson(self):
         task_dict = {
