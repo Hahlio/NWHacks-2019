@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 def handle_new_user(username):
     retval = {}
+    print('INSIDE FN' , username)
     user_id = create_user({"username":username})
     retval["ID"] = user_id
     retval["status"] = 200
@@ -19,12 +20,13 @@ def handle_username(request, username):
             temp = User.objects.get(username=username)
             retval["userID"] = temp.id
             retval["status"] = 200
+            print("inside try")
         except ObjectDoesNotExist:
             retval["status"] = 404
             retval["user_message"] = "User not found"
         return JsonResponse(retval, status=retval["status"])
     elif request.method == 'POST':
-        return handle_new_user(request)
+        return handle_new_user(username)
 
 def handle_user(request, user_id):
     print("Ran user")
