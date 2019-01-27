@@ -3,7 +3,7 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Goal
+from .models import Goal, get_goal_obj
 from user.models import User
 from datetime import date
 
@@ -39,9 +39,9 @@ def handle_new_goal(request):
 def get_goal(request, goal_id):
     retval = {}
     retval = get_goal_obj(goal_id)
-    if(goal_obj["exist"]):
+    if(retval["exist"]):
         retval["status"] = 200
-        return goal_obj
+        return retval
     else:
         retval["status"] = 404
         retval["user_message"] = "User is not found"
@@ -64,12 +64,11 @@ def post_goal(request, user_id):
     user_obj = User.objects.get(pk=user_id)
 
     goal_obj = Goal(goal=json_args["goal"], done=False, user=user_obj)
-    date = json_obj["deadline"].split("-")
-    goal_obj.deadline = date(int(date[2]), int(date[1]), int(date[0]))
-
+   
     goal_obj.save()
 
     retval = {
         "status":200,
         "ID":goal_obj.id
     }
+    return retval
